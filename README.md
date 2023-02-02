@@ -16,7 +16,7 @@ custom card for fingerprint management
 ## hacs Card install
 1. add madmicio/lettore-impronte-digitali-ita as custom reposity
 
-2. Find and install `lettore-impronte-digitali-ita` plugin
+2. Find and install `lettore impronte digitali` plugin
 
 3. Add a reference  inside your resources config:
 
