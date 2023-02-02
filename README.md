@@ -1,13 +1,17 @@
 
-# Lettore Impronte Digitali (ita ver.)
+# Fingerprint Reader card (ita ver.)
 
 ## Description
-custom card per la gestione delle impronte digitali
+custom card for fingerprint management
 
 
+
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![buymeacoffee_badge](https://img.shields.io/badge/Donate-buymeacoffe-ff813f?style=flat)](https://www.buymeacoffee.com/madmicio)
 
 ![all](example/fingerprint.jpg)
+
+### this card manages a fingerprint reader managed by esphome firmware. the firmware for the esp is in the esphome-fingerprints file. you can find the original version on  [indumus.it](https://indomus.it/progetti/integrare-un-lettore-di-impronte-digitali-a-home-assistant-via-nodemcu-ed-esphome/)
 
 ## hacs Card install
 1. add madmicio/lettore-impronte-digitali-ita as custom reposity
