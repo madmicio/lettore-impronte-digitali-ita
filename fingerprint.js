@@ -41,7 +41,7 @@ class FingerprintReader extends LitElement {
 
     return html`
     <div class="card">
-      <h2>lettore impronte</h2>
+      <h2>lettore impronte ${this.config.name ? html`${this.config.name}` : html``}</h2>
 
       ${this._show_main ? html`
       <div style="display: flex;">
@@ -127,7 +127,102 @@ class FingerprintReader extends LitElement {
   }
 
 
-_isAutomationOn(){return this.config.automation_list.some((t=>{const i=this.hass.states[t.automation];return i&&"on"===i.state}))}_toggleAutomation(t){this.hass.callService("automation","toggle",{entity_id:t})}updateValue(t){this.inputValue=t.target.value,this.shadowRoot.getElementById("inputName").value=null!=this.hass.states[this.config.saver].attributes.variables[this.inputValue]?this.hass.states[this.config.saver].attributes.variables[this.inputValue]:"inserisci nome"}updateName(t){this.inputName=t.target.value}increment(){this.inputValue++,this.updateValue({target:{value:this.inputValue}})}decrement(){this.inputValue--,this.updateValue({target:{value:this.inputValue}})}callService(){this.hass.callService("esphome","fingerprint_reader_enroll",{finger_id:this.inputValue,num_scans:2}),this.hass.callService("saver","set_variable",{name:this.inputValue,value:this.inputName}),this.shadowRoot.getElementById("inputName").value="appoggia il dito",setTimeout((()=>{this.updateValue({target:{value:this.inputValue}})}),8e3)}cancelService(){this.hass.callService("esphome","fingerprint_reader_delete",{finger_id:this.inputValue}),this.hass.callService("saver","delete_variable",{name:this.inputValue}),this.shadowRoot.getElementById("inputName").value="impronta cancellata",setTimeout((()=>{this.updateValue({target:{value:this.inputValue}})}),2e3)}renameService(){this.hass.callService("saver","set_variable",{name:this.inputValue,value:this.inputName})}toggleDoor(){this.hass.callService("automation","toggle",{entity_id:this.config.automation})}setConfig(t){if(!t.saver)throw new Error("You need to define saver component");if(!t.state_fingerprint)throw new Error("You need to define state_fingerprint sensor");if(!t.sensor_record)throw new Error("You need to define sensor_record sensor");if(!t.last_id)throw new Error("You need to define last_id sensor");this.config=t}getCardSize(){return this.config.entities.length+1}static get styles(){return css`
+  _isAutomationOn() {
+    return this.config.automation_list.some(ent => {
+      const stateObj = this.hass.states[ent.automation];
+      return stateObj && stateObj.state === 'on';
+    });
+  }
+
+  _toggleAutomation(automation) {
+    this.hass.callService("automation", "toggle", {
+      entity_id: automation
+    });
+  }
+
+  updateValue(e) {
+    this.inputValue = e.target.value;
+    this.shadowRoot.getElementById("inputName").value= this.hass.states[this.config.saver].attributes.variables[this.inputValue] != null ? this.hass.states[this.config.saver].attributes.variables[this.inputValue] : 'inserisci nome';
+  }
+  updateName(e) {
+    this.inputName = e.target.value;
+  }
+
+  increment() {
+    this.inputValue++;
+    this.updateValue({target:{value: this.inputValue}});
+  }
+
+  decrement() {
+    this.inputValue--;
+    this.updateValue({target:{value: this.inputValue}});
+  }
+
+  callService() {
+    this.hass.callService("esphome", "fingerprint_reader_enroll", {
+      finger_id: this.inputValue,
+      num_scans: 2
+    });
+    this.hass.callService("saver", "set_variable", {
+      name: this.inputValue,
+      value: this.inputName,
+    });
+    this.shadowRoot.getElementById("inputName").value= "appoggia il dito";
+
+    setTimeout(() => {
+      this.updateValue({target:{value: this.inputValue}});
+    }, 8000);
+    ;
+
+  }
+  cancelService() {
+    this.hass.callService("esphome", "fingerprint_reader_delete", {
+      finger_id: this.inputValue,
+    });
+    this.hass.callService("saver", "delete_variable", {
+      name: this.inputValue,
+    });
+    this.shadowRoot.getElementById("inputName").value= "impronta cancellata";
+    setTimeout(() => {
+      this.updateValue({target:{value: this.inputValue}});
+    }, 2000);
+  }
+
+  renameService() {
+    this.hass.callService("saver", "set_variable", {
+      name: this.inputValue,
+      value: this.inputName,
+    });
+    
+  }
+
+  toggleDoor() {
+    this.hass.callService("automation", "toggle", {
+      entity_id: this.config.automation
+    });
+  }
+
+  setConfig(config) {
+    if (!config.saver) {
+      throw new Error("You need to define saver component");
+      }
+    if (!config.state_fingerprint) {
+    throw new Error("You need to define state_fingerprint sensor");
+    }
+
+    if (!config.sensor_record) {
+      throw new Error("You need to define sensor_record sensor");
+      }
+      if (!config.last_id) {
+      throw new Error("You need to define last_id sensor");
+      }
+    
+    this.config = config;
+    }
+
+  getCardSize() {
+    return this.config.entities.length + 1;
+  }
 
   static get styles() {
     return css`
