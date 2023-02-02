@@ -1,6 +1,6 @@
 {
-"name": "pH meter",
+"name": "Lettore impronte digitali",
 "content_in_root": true,
-"filename": "ph_meter.js",
+"filename": "fingerprint.js",
 "render_readme" : true
 }
