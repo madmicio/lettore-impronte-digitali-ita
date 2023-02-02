@@ -66,9 +66,9 @@ last_id: sensor.ultimo_id_impronta
 ### automations list options
 | Name | Type | Default | Supported options | Description |
 | -------------- | ----------- | ------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name` | string | **Option** | type: 'custom:fingerprint-reader' | Type of the card |
-| `state_fingerprint` | string | **Required** | sensor.yourstatesensor | fingerprint sensor state |
-| `sensor_record` | string | **Required** | sensor.youreredordersensor  | fingerprint recorder state |
+| `name` | string | friendly name |  | automation custom name |
+| `icon` | string | default icon  |  | automation icon, if not indicated a default icon will be displayed and not the automation icon |
+| `label` | string | none |  | if not configured the field is empty |
 
 ## automations option
 
