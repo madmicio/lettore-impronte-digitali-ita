@@ -11,7 +11,7 @@ custom card for fingerprint management
 
 ![all](example/fingerprint.jpg)
 
-### this card manages a fingerprint reader managed by esphome firmware. the firmware for the esp is in the esphome-fingerprints file. you can find the original version on  [indumus.it](https://indomus.it/progetti/integrare-un-lettore-di-impronte-digitali-a-home-assistant-via-nodemcu-ed-esphome/)
+### this card manages a fingerprint reader managed by esphome firmware. the firmware for the esp is in the esphome-fingerprints.yaml file. you can find the original version on  [indumus.it](https://indomus.it/progetti/integrare-un-lettore-di-impronte-digitali-a-home-assistant-via-nodemcu-ed-esphome/)
 
 ## hacs Card install
 1. add madmicio/lettore-impronte-digitali-ita as custom reposity
