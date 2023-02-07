@@ -22,14 +22,14 @@ custom card for fingerprint management
 
   ```yaml
 resources:
-url: /hacsfiles/lettore-impronte-digitali-ita/figerprint.js
+url: /hacsfiles/lettore-impronte-digitali-ita/fingerprint.js
 type: module
 ```
 
 
 ### Manual install
 
-1. Download and copy `figerprint.js` from (https://github.com/madmicio/lettore-impronte-digitali-ita) into your custom components  directory.
+1. Download and copy `fingerprint.js` from (https://github.com/madmicio/lettore-impronte-digitali-ita) into your custom components  directory.
 
 2. Add a reference `` from (https://github.com/madmicio/lettore-impronte-digitali-ita) into your custom components  directory.
 ` inside your resources config:
