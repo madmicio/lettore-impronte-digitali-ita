@@ -61,6 +61,7 @@ last_id: sensor.ultimo_id_impronta
 | Name | Type | Default | Supported options | Description |
 | -------------- | ----------- | ------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `type` | string | **Required** | type: 'custom:fingerprint-reader' | Type of the card |
+| `esp_name` | string | **Option** | your esp name | enter the name of the esp if different from: fingerprint_reader |
 | `state_fingerprint` | string | **Required** | sensor.yourstatesensor | fingerprint sensor state |
 | `sensor_record` | string | **Required** | sensor.youreredordersensor  | fingerprint recorder state |
 | `saver` | string | **Required** | es: saver.saver  | saver component |
