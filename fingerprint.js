@@ -87,7 +87,7 @@ class FingerprintReader extends LitElement {
         <button @click="${() => this.increment()}" class="plus"></button>
       </div>
       <div class="option_div">
-        <ha-icon class="option" icon="mdi:undo-variant" @click="${() => {this._show_options = false; this._show_main = true;}}"></ha-icon>
+        <ha-icon class="option" icon="mdi:undo-variant" @click="${() => { this._show_options = false; this._show_main = true; }}"></ha-icon>
       </div>
     </div>
     <div class="menage_button" style="display: flex;">
@@ -104,13 +104,13 @@ class FingerprintReader extends LitElement {
       <div class="last_user">Numero di automazioni: ${this.config.automation_list.length}</div>
 
       <div class="option_div">
-          <ha-icon class="option"  icon="mdi:undo-variant" @click=${() => {this._show_automations =! this._show_automations; this._show_main =! this._show_main; }}></ha-icon>
+          <ha-icon class="option"  icon="mdi:undo-variant" @click=${() => { this._show_automations = !this._show_automations; this._show_main = !this._show_main; }}></ha-icon>
         </div>
       </div>
       <div class="automations_buttons">
         ${this.config.automation_list.map(ent => {
-          const stateObj = this.hass.states[ent.automation];
-          return stateObj ? html`
+      const stateObj = this.hass.states[ent.automation];
+      return stateObj ? html`
 
             <div class="buttons_automations_container">
               <ha-icon class="${stateObj.state == "on" ? 'button_on_ha-icon option' : 'button_off_ha-icon option'}" icon="${ent.icon || 'mdi:refresh-auto'}" @click="${() => this._toggleAutomation(ent.automation)}"/></ha-icon>
@@ -118,7 +118,7 @@ class FingerprintReader extends LitElement {
               <div class="left_row label">${ent.label || ' '}</div>
             </div>
           ` : html``;
-        })}
+    })}
       </div>
       ` : html` `}
     </div>
@@ -142,7 +142,7 @@ class FingerprintReader extends LitElement {
 
   updateValue(e) {
     this.inputValue = e.target.value;
-    this.shadowRoot.getElementById("inputName").value= this.hass.states[this.config.saver].attributes.variables[this.inputValue] != null ? this.hass.states[this.config.saver].attributes.variables[this.inputValue] : 'inserisci nome';
+    this.shadowRoot.getElementById("inputName").value = this.hass.states[this.config.saver].attributes.variables[this.inputValue] != null ? this.hass.states[this.config.saver].attributes.variables[this.inputValue] : 'inserisci nome';
   }
   updateName(e) {
     this.inputName = e.target.value;
@@ -150,16 +150,17 @@ class FingerprintReader extends LitElement {
 
   increment() {
     this.inputValue++;
-    this.updateValue({target:{value: this.inputValue}});
+    this.updateValue({ target: { value: this.inputValue } });
   }
 
   decrement() {
     this.inputValue--;
-    this.updateValue({target:{value: this.inputValue}});
+    this.updateValue({ target: { value: this.inputValue } });
   }
 
   callService() {
-    this.hass.callService("esphome", "fingerprint_reader_enroll", {
+    let esp_name = this.hass.config.esp_name || "fingerprint_reader";
+    this.hass.callService("esphome", `${esp_name}_enroll`, {
       finger_id: this.inputValue,
       num_scans: 2
     });
@@ -167,24 +168,25 @@ class FingerprintReader extends LitElement {
       name: this.inputValue,
       value: this.inputName,
     });
-    this.shadowRoot.getElementById("inputName").value= "appoggia il dito";
+    this.shadowRoot.getElementById("inputName").value = "appoggia il dito";
 
     setTimeout(() => {
-      this.updateValue({target:{value: this.inputValue}});
+      this.updateValue({ target: { value: this.inputValue } });
     }, 8000);
     ;
 
   }
   cancelService() {
-    this.hass.callService("esphome", "fingerprint_reader_delete", {
+    let esp_name = this.hass.config.esp_name || "fingerprint_reader";
+    this.hass.callService("esphome", `${esp_name}_delete`, {
       finger_id: this.inputValue,
     });
     this.hass.callService("saver", "delete_variable", {
       name: this.inputValue,
     });
-    this.shadowRoot.getElementById("inputName").value= "impronta cancellata";
+    this.shadowRoot.getElementById("inputName").value = "impronta cancellata";
     setTimeout(() => {
-      this.updateValue({target:{value: this.inputValue}});
+      this.updateValue({ target: { value: this.inputValue } });
     }, 2000);
   }
 
@@ -193,7 +195,7 @@ class FingerprintReader extends LitElement {
       name: this.inputValue,
       value: this.inputName,
     });
-    
+
   }
 
   toggleDoor() {
@@ -205,20 +207,20 @@ class FingerprintReader extends LitElement {
   setConfig(config) {
     if (!config.saver) {
       throw new Error("You need to define saver component");
-      }
+    }
     if (!config.state_fingerprint) {
-    throw new Error("You need to define state_fingerprint sensor");
+      throw new Error("You need to define state_fingerprint sensor");
     }
 
     if (!config.sensor_record) {
       throw new Error("You need to define sensor_record sensor");
-      }
-      if (!config.last_id) {
-      throw new Error("You need to define last_id sensor");
-      }
-    
-    this.config = config;
     }
+    if (!config.last_id) {
+      throw new Error("You need to define last_id sensor");
+    }
+
+    this.config = config;
+  }
 
   getCardSize() {
     return this.config.entities.length + 1;
