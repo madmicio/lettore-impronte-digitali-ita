@@ -27,7 +27,7 @@ class FingerprintReader extends LitElement {
     const saver = this.hass.states[this.config.saver].attributes.variables;
     const state = this.hass.states[this.config.state_fingerprint].state;
     const name = this.config.name ? this.config.name: "Lettore Impronte"
-    const show_title = this.config.show_title ? this.config.show_title : "true";
+    const show_name = this.config.show_name ? this.config.show_name : "true";
     const name_align = this.config.name_align ? this.config.name_align : "left";
     let backgroundcolor = "";
     let color = "";
@@ -45,7 +45,7 @@ class FingerprintReader extends LitElement {
 
     return html`
     <div class="card">
-      <h2 style="text-align: ${name_align}; ${show_title == "true" ? ' ' : 'display:none;'}" >${this.config.name ? html`${this.config.name}` : name }</h2>
+      <h2 style="text-align: ${name_align}; ${show_name == "true" ? ' ' : 'display:none;'}" >${this.config.name ? html`${this.config.name}` : name }</h2>
 
       ${this._show_main ? html`
       <div style="display: flex;">
