@@ -67,6 +67,8 @@ last_id: sensor.ultimo_id_impronta
 | `saver` | string | **Required** | es: saver.saver  | saver component |
 | `last_id` | string | **Option**  | sensor.yourlastidssensor | last id sensor |
 | `name` | string | **Option**  | fingerprint name | if you have more than one sensor or want to give a name to the sensor you can assign it to the reader |
+| `show_name` | string | **Option**  | "true" | "true" or "false" show/hide reader name |
+| `name_align` | string | **Option**  | left| left - center - right name alignment |
 | `automation_list` | string |  |  | list of automations to manage in the card|
 
 ### automations list options
@@ -75,6 +77,7 @@ last_id: sensor.ultimo_id_impronta
 | `name` | string | friendly name |  | automation custom name |
 | `icon` | string | default icon  |  | automation icon, if not indicated a default icon will be displayed and not the automation icon |
 | `label` | string | none |  | if not configured the field is empty |
+
 
 ## automations option
 
