@@ -1,4 +1,6 @@
-import { LitElement, html, css } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
+var LitElement = LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
+var html = LitElement.prototype.html;
+var css = LitElement.prototype.css;
 
 class FingerprintReader extends LitElement {
   static get properties() {
@@ -24,7 +26,9 @@ class FingerprintReader extends LitElement {
   render() {
     const saver = this.hass.states[this.config.saver].attributes.variables;
     const state = this.hass.states[this.config.state_fingerprint].state;
-
+    const name = this.config.name ? this.config.name: "Lettore Impronte"
+    const show_title = this.config.show_title ? this.config.show_title : "true";
+    const name_align = this.config.name_align ? this.config.name_align : "left";
     let backgroundcolor = "";
     let color = "";
     let icon = "mdi:fingerprint";
@@ -41,7 +45,7 @@ class FingerprintReader extends LitElement {
 
     return html`
     <div class="card">
-      <h2>lettore impronte ${this.config.name ? html`${this.config.name}` : html``}</h2>
+      <h2 style="text-align: ${name_align}; ${show_title == "true" ? ' ' : 'display:none;'}" >${this.config.name ? html`${this.config.name}` : name }</h2>
 
       ${this._show_main ? html`
       <div style="display: flex;">
