@@ -9,9 +9,9 @@ class FingerprintReader extends LitElement {
       config: {},
       inputValue: { type: Number },
       inputName: { type: String },
-      _show_main: {},
-      _show_options: {},
-      _show_entities : {},
+      _show_options: { type: Boolean },
+      _show_main: { type: Boolean },
+      _show_entities: { type: Boolean }
     };
   }
 
@@ -60,7 +60,7 @@ class FingerprintReader extends LitElement {
           ` : html`
             <div class="option_div" 
                  style="margin-right: 15px; 
-                        background-color: ${this._isEntityOn() ? 'var(--switch-checked-button-color)' : 'var(--primary-background-color)'}; 
+                        background-color: ${this._isEntityOn() ? 'var(--switch-checked-button-color)' : 'var(--card-background-color)'}; 
                         color: ${this._isEntityOn() ? 'white' : ''};"  
                  @click="${() => { this._show_entities  = !this._show_entities ; this._show_main = !this._show_main; }}">
               <ha-icon class="option"  icon="mdi:refresh-auto"></ha-icon>
@@ -107,8 +107,11 @@ class FingerprintReader extends LitElement {
       <div class="auto_back">
       <div class="last_user">Numero di automazioni: ${this.config.entity_list.length}</div>
 
-      <div class="option_div">
+      <div class="option_div" style="margin-right: 15px">
           <ha-icon class="option"  icon="mdi:undo-variant" @click=${() => { this._show_entities  = !this._show_entities ; this._show_main = !this._show_main; }}></ha-icon>
+        </div>
+        <div  style="width: 41.33px;">
+
         </div>
       </div>
       <div class="entities_buttons">
@@ -261,7 +264,6 @@ class FingerprintReader extends LitElement {
       border-width: var(--ha-card-border-width, 1px);
       border-color: var(--ha-card-border-color, var(--divider-color, #e0e0e0) );
       border-style: solid;
-      background-color: var(--card-background-color) !important;
   }
   
   .entities_active {

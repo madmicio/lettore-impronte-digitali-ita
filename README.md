@@ -69,21 +69,23 @@ last_id: sensor.ultimo_id_impronta
 | `name` | string | **Option**  | fingerprint name | if you have more than one sensor or want to give a name to the sensor you can assign it to the reader |
 | `show_name` | string | **Option**  | "true" | "true" or "false" show/hide reader name |
 | `name_align` | string | **Option**  | left| left - center - right name alignment |
-| `automation_list` | string |  |  | list of automations to manage in the card|
+| `entity_list` | string |  |  | list of eneities to manage in the card|
 
-### automations list options
+### entity list options
 | Name | Type | Default | Supported options | Description |
 | -------------- | ----------- | ------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name` | string | friendly name |  | automation custom name |
-| `icon` | string | default icon  |  | automation icon, if not indicated a default icon will be displayed and not the automation icon |
+| `name` | string | friendly name |  | entity custom name |
+| `icon` | string | default icon  |  | entity icon, if not indicated a default icon will be displayed and not the entity icon |
 | `label` | string | none |  | if not configured the field is empty |
 
 
-## automations option
+## entity option
 
-this card gives the possibility to enable/disable the automations indicated in the configuration.
-if the configuration list contains only one automation, a button will appear which will toggle the automation. if the list contains more than one automation then the same button will show the list of configured automations.
-in this case the button will appear active if one of the configured automations is active.
+this card gives the possibility to enable/disable the eneities indicated in the configuration.
+if the configuration list contains only one entity, a button will appear which will toggle the entity. if the list contains more than one entity then the same button will show the list of configured eneities.
+in this case the button will appear active if one of the configured eneities is active.
+
+### p.s.: now you can configure entitys, lights and switches
 
 ```yaml
 type: 'custom:fingerprint-reader'
@@ -91,16 +93,16 @@ state_fingerprint: sensor.stato_impronta_2
 sensor_record: binary_sensor.acquisendo_impronta
 saver: saver.saver
 last_id: sensor.ultimo_id_impronta
-automation_list:
-  - automation: automation.1
-    name: automation 1
+entity_list:
+  - entity: entity.1
+    name: entity 1
     label: open
     icon: mdi:door-open
-  - automation: automation.2
-    name: automation 2
+  - entity: entity.2
+    name: entity 2
 ```
 
-for each automation you can configure the name, label and icon.
- - name is an option, and if not specified in config, the button will have the friendly name of the automation
- - icon is an option, if not indicated the button will have a default icon not, if assigned, the automation icon
+for each entity you can configure the name, label and icon.
+ - name is an option, and if not specified in config, the button will have the friendly name of the entity
+ - icon is an option, if not indicated the button will have a default icon not, if assigned, the entity icon
  - label is an option, if not indicated the field will remain empty
