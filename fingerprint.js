@@ -11,7 +11,7 @@ class FingerprintReader extends LitElement {
       inputName: { type: String },
       _show_main: {},
       _show_options: {},
-      _show_automations: {},
+      _show_entities : {},
     };
   }
 
@@ -19,7 +19,7 @@ class FingerprintReader extends LitElement {
     super();
     this.inputValue = 1;
     this._show_options = false;
-    this._show_automations = false;
+    this._show_entities  = false;
     this._show_main = true;
   }
 
@@ -27,7 +27,7 @@ class FingerprintReader extends LitElement {
     const saver = this.hass.states[this.config.saver].attributes.variables;
     const state = this.hass.states[this.config.state_fingerprint].state;
     const name = this.config.name ? this.config.name: "Lettore Impronte"
-    const show_name = this.config.show_name ? this.config.show_name : "true";
+    const show_title = this.config.show_title ? this.config.show_title : "true";
     const name_align = this.config.name_align ? this.config.name_align : "left";
     let backgroundcolor = "";
     let color = "";
@@ -45,24 +45,24 @@ class FingerprintReader extends LitElement {
 
     return html`
     <div class="card">
-      <h2 style="text-align: ${name_align}; ${show_name == "true" ? ' ' : 'display:none;'}" >${this.config.name ? html`${this.config.name}` : name }</h2>
+      <h2 style="text-align: ${name_align}; ${show_title == "true" ? ' ' : 'display:none;'}" >${this.config.name ? html`${this.config.name}` : name }</h2>
 
       ${this._show_main ? html`
       <div style="display: flex;">
         <div class="last_user">Ultimo accesso:&nbsp;<span style="font-size: 16px;">${saver[this.hass.states[this.config.last_id].state]}</span></div>
-        ${this.config.automation_list ? html`
-          ${this.config.automation_list.length === 1 ? html`
-            <div class="${this.hass.states[this.config.automation].state === 'on' ? 'automation_active' : 'option_div'}"
-                 style="margin-right: 15px;" 
-                 @click="${() => this.toggleDoor()}">
+        ${this.config.entity_list ? html`
+          ${this.config.entity_list.length === 1 ? html`
+            <div class="${this.hass.states[this.config.entity_list[0].entity].state === 'on' ? 'entities_active' : 'option_div'}"
+                style="margin-right: 15px;" 
+                @click="${() => this.toggleDoor(this.config.entity_list[0].entity)}">
               <ha-icon class="option"  icon="mdi:refresh-auto"></ha-icon>
             </div>
           ` : html`
             <div class="option_div" 
                  style="margin-right: 15px; 
-                        background-color: ${this._isAutomationOn() ? 'var(--switch-checked-button-color)' : 'var(--primary-background-color)'}; 
-                        color: ${this._isAutomationOn() ? 'white' : ''};"  
-                 @click="${() => { this._show_automations = !this._show_automations; this._show_main = !this._show_main; }}">
+                        background-color: ${this._isEntityOn() ? 'var(--switch-checked-button-color)' : 'var(--primary-background-color)'}; 
+                        color: ${this._isEntityOn() ? 'white' : ''};"  
+                 @click="${() => { this._show_entities  = !this._show_entities ; this._show_main = !this._show_main; }}">
               <ha-icon class="option"  icon="mdi:refresh-auto"></ha-icon>
             </div>
           `}
@@ -84,11 +84,11 @@ class FingerprintReader extends LitElement {
     ${this._show_options ? html`
     <div style="display: flex;">
       <div class="number-input">
-        <button @click="${() => this.decrement()}"></button>
+        <ha-icon  class="arrows" icon="mdi:chevron-left" @click="${() => this.decrement()}"></ha-icon>
         <div class="id_number">id: ${this.inputValue}</div>
         <input class="input_text" type="text" id="inputName" value="${saver[this.inputValue] != null ? saver[this.inputValue] : 'inserisci nome'}" @input="${(e) => this.updateName(e)}">
         <input class="quantity" min="0" name="quantity" type="number" value="${this.inputValue}" @input="${(e) => this.updateValue(e)}">
-        <button @click="${() => this.increment()}" class="plus"></button>
+        <ha-icon class="arrows"  icon="mdi:chevron-right" @click="${() => this.increment()}"></ha-icon>
       </div>
       <div class="option_div">
         <ha-icon class="option" icon="mdi:undo-variant" @click="${() => { this._show_options = false; this._show_main = true; }}"></ha-icon>
@@ -103,21 +103,21 @@ class FingerprintReader extends LitElement {
 
 
       
-      ${this._show_automations ? html`
+      ${this._show_entities  ? html`
       <div class="auto_back">
-      <div class="last_user">Numero di automazioni: ${this.config.automation_list.length}</div>
+      <div class="last_user">Numero di automazioni: ${this.config.entity_list.length}</div>
 
       <div class="option_div">
-          <ha-icon class="option"  icon="mdi:undo-variant" @click=${() => { this._show_automations = !this._show_automations; this._show_main = !this._show_main; }}></ha-icon>
+          <ha-icon class="option"  icon="mdi:undo-variant" @click=${() => { this._show_entities  = !this._show_entities ; this._show_main = !this._show_main; }}></ha-icon>
         </div>
       </div>
-      <div class="automations_buttons">
-        ${this.config.automation_list.map(ent => {
-      const stateObj = this.hass.states[ent.automation];
+      <div class="entities_buttons">
+        ${this.config.entity_list.map(ent => {
+      const stateObj = this.hass.states[ent.entity];
       return stateObj ? html`
 
-            <div class="buttons_automations_container">
-              <ha-icon class="${stateObj.state == "on" ? 'button_on_ha-icon option' : 'button_off_ha-icon option'}" icon="${ent.icon || 'mdi:refresh-auto'}" @click="${() => this._toggleAutomation(ent.automation)}"/></ha-icon>
+            <div class="buttons_entities_container">
+              <ha-icon class="${stateObj.state == "on" ? 'button_on_ha-icon option' : 'button_off_ha-icon option'}" icon="${ent.icon || 'mdi:refresh-auto'}" @click="${() => this.toggleDoor(ent.entity)}"/></ha-icon>
               <div class="left_row text ">${ent.name || stateObj.attributes.friendly_name} ${stateObj.state} </div>   
               <div class="left_row label">${ent.label || ' '}</div>
             </div>
@@ -131,18 +131,13 @@ class FingerprintReader extends LitElement {
   }
 
 
-  _isAutomationOn() {
-    return this.config.automation_list.some(ent => {
-      const stateObj = this.hass.states[ent.automation];
+  _isEntityOn() {
+    return this.config.entity_list.some(ent => {
+      const stateObj = this.hass.states[ent.entity];
       return stateObj && stateObj.state === 'on';
     });
   }
 
-  _toggleAutomation(automation) {
-    this.hass.callService("automation", "toggle", {
-      entity_id: automation
-    });
-  }
 
   updateValue(e) {
     this.inputValue = e.target.value;
@@ -163,7 +158,7 @@ class FingerprintReader extends LitElement {
   }
 
   callService() {
-    let esp_name = this.hass.config.esp_name || "fingerprint_reader";
+    let esp_name = this.config.esp_name || "fingerprint_reader";
     this.hass.callService("esphome", `${esp_name}_enroll`, {
       finger_id: this.inputValue,
       num_scans: 2
@@ -181,7 +176,7 @@ class FingerprintReader extends LitElement {
 
   }
   cancelService() {
-    let esp_name = this.hass.config.esp_name || "fingerprint_reader";
+    let esp_name = this.config.esp_name || "fingerprint_reader";
     this.hass.callService("esphome", `${esp_name}_delete`, {
       finger_id: this.inputValue,
     });
@@ -202,9 +197,11 @@ class FingerprintReader extends LitElement {
 
   }
 
-  toggleDoor() {
-    this.hass.callService("automation", "toggle", {
-      entity_id: this.config.automation
+  toggleDoor(entity) {
+    if (!entity) return;
+    const [domain] = entity.split(".");
+    this.hass.callService(domain, "toggle", {
+        entity_id: entity
     });
   }
 
@@ -250,7 +247,7 @@ class FingerprintReader extends LitElement {
       text-align: center
   }
   
-  .automation_active,.option_div {
+  .entities_active,.option_div {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -263,10 +260,11 @@ class FingerprintReader extends LitElement {
   .option_div {
       border-width: var(--ha-card-border-width, 1px);
       border-color: var(--ha-card-border-color, var(--divider-color, #e0e0e0) );
-      border-style: solid
+      border-style: solid;
+      background-color: var(--card-background-color) !important;
   }
   
-  .automation_active {
+  .entities_active {
       border: 0;
       color: #fff;
       background-color: var(--switch-checked-button-color)
@@ -316,6 +314,11 @@ class FingerprintReader extends LitElement {
       background-color: var(--secondary-background-color);
       border-radius: 15px
   }
+
+  .arrows {
+      cursor: pointer;  
+      --mdc-icon-size: 36px;
+  }
   
   .id_name {
       flex-grow: 4;
@@ -331,12 +334,14 @@ class FingerprintReader extends LitElement {
       border: 0;
       font-size: 16px;
       flex-grow: 5;
-      width: 110px
+      width: 110px;
+      background-color: var(--card-background-color);
   }
   
   .id_number,.number-input button {
       align-items: center;
       justify-content: center
+      align-items: center;
   }
   
   .id_number {
@@ -367,19 +372,21 @@ class FingerprintReader extends LitElement {
       position: relative
   }
   
-  .number-input button:after,.number-input button:before {
-      display: inline-block;
-      position: absolute;
-      content: "";
-      width: 1rem;
-      height: 2px;
-      background-color: #212121;
-      transform: translate(-50%,-50%)
-  }
+  // .number-input button:after,.number-input button:before {
+  //     display: inline-block;
+  //     position: absolute;
+  //     content: "";
+  //     width: 1rem;
+  //     height: 2px;
+  //     background-color: #212121;
+  //     transform: translate(-50%,-50%);
+  //     color: red;
+  // }
   
-  .number-input button.plus:after {
-      transform: translate(-50%,-50%) rotate(90deg)
-  }
+  // .number-input button.plus:after {
+  //     transform: translate(-50%,-50%) rotate(90deg);
+  //     color: red;
+  // }
   
   .number-input input[type=number] {
       font-family: Raleway;
@@ -408,7 +415,7 @@ class FingerprintReader extends LitElement {
       cursor: pointer
   }
   
-  .buttons_automations_container {
+  .buttons_entities_container {
       display: grid;
       grid-template-columns: 38px auto;
       grid-template-rows: 19px 19px;
@@ -418,7 +425,7 @@ class FingerprintReader extends LitElement {
       width: 50%
   }
   
-  .buttons_automations_container>div {
+  .buttons_entities_container>div {
       text-align: left;
       font-size: 14px
   }
@@ -467,7 +474,7 @@ class FingerprintReader extends LitElement {
       color: #ffff
   }
   
-  .automations_buttons {
+  .entities_buttons {
       display: flex;
       flex-wrap: wrap;
       height: 88px;
@@ -477,7 +484,7 @@ class FingerprintReader extends LitElement {
       margin-top: -6px;
   }
   
-  .automations_buttons::-webkit-scrollbar {
+  .entities_buttons::-webkit-scrollbar {
       display: none
   }
 
